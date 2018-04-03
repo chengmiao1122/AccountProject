@@ -34,11 +34,11 @@ public class PlanActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initView() {
-        PlanSure         = (Button) findViewById(R.id.btn_savebill);
-        PlanCancel       = (Button) findViewById(R.id.btn_cancelplan);
-        MorningPlan     = (EditText) findViewById(R.id.MorningPlan);
-        AfternoonPlan   = (EditText) findViewById(R.id.AfternoonPlan);
-        NightPlan       = (EditText) findViewById(R.id.NightPlan);
+        PlanSure = findViewById(R.id.btn_savebill);
+        PlanCancel = findViewById(R.id.btn_cancelplan);
+        MorningPlan = findViewById(R.id.MorningPlan);
+        AfternoonPlan = findViewById(R.id.AfternoonPlan);
+        NightPlan = findViewById(R.id.NightPlan);
 
         PlanSure.setOnClickListener(this);
         PlanCancel.setOnClickListener(this);
@@ -58,22 +58,20 @@ public class PlanActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void GetData()
-    {
+    public void GetData() {
         Data.clear();
         Data.add(MorningPlan.getText().toString());
         Data.add(AfternoonPlan.getText().toString());
         Data.add(NightPlan.getText().toString());
     }
 
-    public void WriteData()
-    {
+    public void WriteData() {
         mMysql = new MySQLiteHelper(this, "finance.db", null, 1);
         mDataBase = mMysql.getReadableDatabase();
 
-        ContentValues cv=new ContentValues();
-        cv.put("Morningplan",Data.get(0));
-        cv.put("Afternoonplan",Data.get(1));
+        ContentValues cv = new ContentValues();
+        cv.put("Morningplan", Data.get(0));
+        cv.put("Afternoonplan", Data.get(1));
         cv.put("Nightplan", Data.get(2));
 
         mDataBase.insert("plan", "Nightplan", cv);
