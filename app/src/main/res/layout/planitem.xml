@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/showmorningplan"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#e9f8df"
+        android:gravity="top|left|center"
+        android:text="1"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/showafternoonplan"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:gravity="top|left|center"
+        android:text="2"
+        android:layout_below="@+id/showmorningplan"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#f9eeee"
+        android:textSize="12dp"/>
+
+    <TextView
+        android:id="@+id/shownightplan"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:gravity="top|left|center"
+        android:text="3"
+        android:layout_gravity="left|bottom"
+        android:layout_below="@+id/showafternoonplan"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#fde3d8"
+        android:textSize="12dp"/>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Rank"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="15dp"
+        android:numStars="5"
+        android:layout_alignBottom="@+id/showmorningplan"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="New Text"
+        android:id="@+id/Conclusion"
+        android:layout_alignBaseline="@+id/showafternoonplan"
+        android:layout_alignBottom="@+id/showafternoonplan"
+        android:layout_alignLeft="@+id/Rank"
+        android:layout_alignStart="@+id/Rank"
+        android:layout_alignRight="@+id/Rank"
+        android:layout_alignEnd="@+id/Rank"
+        android:textSize="12dp"
+        android:background="#faf1c4"/>
+
+</RelativeLayout>
