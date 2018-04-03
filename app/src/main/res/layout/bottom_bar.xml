@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ly_main_tab_bottom"
     android:layout_width="fill_parent"
     android:layout_height="70dp"
-    android:background="@drawable/tar_bar1"
-    android:layout_alignParentBottom="true">
+    android:layout_alignParentBottom="true"
+    android:background="@drawable/tar_bar1">
+                <!--android:background="@drawable/bottom_bar" >-->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -26,14 +27,12 @@
                 android:id="@+id/iv_acount"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/home_pressed" />
+                android:src="@drawable/home_pressed"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000"
                 android:text="account" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -49,18 +48,17 @@
                 android:id="@+id/iv_planDetail"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/plan_unpress" />
+                android:src="@drawable/plan_unpress"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000"
-                android:text="plan detail" />
-
+                android:text="plan" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bottom_mulInput"
+            android:id="@+id/bottom_manage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -72,15 +70,14 @@
                 android:id="@+id/iv_manage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/plus_unpressed" />
+                android:src="@drawable/plus_unpressed" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000"
                 android:text="manage" />
-
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/bottom_setting"
             android:layout_width="0dp"
@@ -94,14 +91,13 @@
                 android:id="@+id/iv_setting"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/setting_unpressed" />
+                android:src="@drawable/setting_unpressed" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000"
                 android:text="setting" />
         </LinearLayout>
-   </LinearLayout>
-</RelativeLayout>
+    </LinearLayout>
 
+</RelativeLayout>

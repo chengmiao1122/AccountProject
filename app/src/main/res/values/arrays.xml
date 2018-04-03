@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="Select_item">
-        <item>Clothes</item>
-        <item>Food</item>
-        <item>Live</item>
-        <item>Traffic</item>
-        <item>Other</item>
+        <item>clothing</item>
+        <item>eat</item>
+        <item>housing</item>
+        <item>tansportation</item>
+        <item>others</item>
     </string-array>
 </resources>
