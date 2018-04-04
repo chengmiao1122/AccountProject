@@ -15,20 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-
-import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Adminstrator on 2017/4/2.
  */
@@ -74,7 +61,7 @@ public class FragmentFind extends Fragment implements View.OnClickListener {
                 int icon = R.drawable.back;
                 CharSequence tickerText = "通知栏";
                 long when = System.currentTimeMillis();
-                Notification notification = new Notification(icon, tickerText, when);
+                //Notification notification = new Notification(icon, tickerText, when);
 
                 //定义下拉通知栏时要展现的内容信息
                 Context context = getActivity().getApplicationContext();
@@ -83,11 +70,11 @@ public class FragmentFind extends Fragment implements View.OnClickListener {
                 Intent notificationIntent = new Intent(getActivity(), MainActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0,
                         notificationIntent, 0);
-                notification.setLatestEventInfo(context, contentTitle, contentText,
-                        contentIntent);
+                //notification.setLatestEventInfo(context, contentTitle, contentText,
+                //       contentIntent);
 
                 //用mNotificationManager的notify方法通知用户生成标题栏消息通知
-                mNotificationManager.notify(1, notification);
+                // mNotificationManager.notify(1, notification);
                 startActivity(new Intent(getActivity(), PlanActivity.class));
                 break;
             default:

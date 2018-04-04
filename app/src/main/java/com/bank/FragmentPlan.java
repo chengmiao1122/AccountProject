@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class FragmentPlan extends Fragment {
 
-    private RecyclerView mRecyclerView;
     private List<PlanData> mplanData;
 
     private HomeAdapter mAdapter;
@@ -34,6 +33,7 @@ public class FragmentPlan extends Fragment {
     //数据库
     private MySQLiteHelper mMysql;
     private SQLiteDatabase mDataBase;
+    private RecyclerView mRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,20 +41,19 @@ public class FragmentPlan extends Fragment {
 
 
         initData();
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.id_recyclerview);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                /*
-                *    在此利用HomeAdapter 将mRecyclerView绑定一个内容适配器
-                * */
+        /*
+         *    在此利用HomeAdapter 将mRecyclerView绑定一个内容适配器
+         * */
         mRecyclerView.setAdapter(mAdapter = new HomeAdapter());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         return view;
 
     }
 
-    public void initData()
-    {
+    public void initData() {
         mplanData = new ArrayList<PlanData>();
         mMysql = new MySQLiteHelper(getActivity(), "finance.db", null, 1);
         mDataBase = mMysql.getReadableDatabase();
@@ -65,7 +64,7 @@ public class FragmentPlan extends Fragment {
         int number = 0;
         while (number < cursor.getCount()) {
 
-            PlanData a =new PlanData();
+            PlanData a = new PlanData();
             a.setMoringPlan(cursor.getString(cursor.getColumnIndex("Morningplan")));
             a.setAfterPlan(cursor.getString(cursor.getColumnIndex("Afternoonplan")));
             a.setNightPlan(cursor.getString(cursor.getColumnIndex("Nightplan")));
@@ -84,55 +83,57 @@ public class FragmentPlan extends Fragment {
     }
 
 
-    class PlanData{
+    class PlanData {
         String MoringPlan;
         String AfterPlan;
         String NightPlan;
         String Conclusion;
         String Rank;
 
-        void setMoringPlan(String plan)
-        {
-            MoringPlan =plan;
+        void setMoringPlan(String plan) {
+            MoringPlan = plan;
         }
 
-        void setAfterPlan(String plan)
-        {
-            AfterPlan =plan;
-        }
-        void setNightPlan(String plan)
-        {
-            NightPlan =plan;
-        }
-        void setRank(String plan)
-        {
-            Rank =plan;
-        }
-        void setConclusion(String plan)
-        {
-            Conclusion =plan;
+        void setAfterPlan(String plan) {
+            AfterPlan = plan;
         }
 
-        String getMoringPlan(){
-            return  this.MoringPlan;
+        void setNightPlan(String plan) {
+            NightPlan = plan;
         }
 
-        String getAfterPlan(){
-            return  this.AfterPlan;
+        void setRank(String plan) {
+            Rank = plan;
         }
-        String getNightPlan(){
-            return  this.NightPlan;
+
+        void setConclusion(String plan) {
+            Conclusion = plan;
         }
-        String getConclusion(){
-            return  this.Conclusion;
+
+        String getMoringPlan() {
+            return this.MoringPlan;
         }
-        String getRank(){
-            return  this.Rank;
+
+        String getAfterPlan() {
+            return this.AfterPlan;
+        }
+
+        String getNightPlan() {
+            return this.NightPlan;
+        }
+
+        String getConclusion() {
+            return this.Conclusion;
+        }
+
+        String getRank() {
+            return this.Rank;
         }
     }
+
     public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-        private  final int[] ATTRS = new int[]{
+        private final int[] ATTRS = new int[]{
                 android.R.attr.listDivider
         };
 
@@ -214,18 +215,15 @@ public class FragmentPlan extends Fragment {
         }
     }
 
-    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>
-    {
+    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(getActivity()).inflate(R.layout.planitem, parent,false));
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(getActivity()).inflate(R.layout.planitem, parent, false));
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position)
-        {
+        public void onBindViewHolder(MyViewHolder holder, int position) {
             PlanData data = mplanData.get(position);
             holder.showMorningplan.setText(data.getMoringPlan());
             holder.showAfternoonplan.setText(data.getAfterPlan());
@@ -237,13 +235,11 @@ public class FragmentPlan extends Fragment {
             return mplanData.size();
         }
 
-        class MyViewHolder extends RecyclerView.ViewHolder
-        {
+        class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView showMorningplan,showAfternoonplan,showNightplan;
+            TextView showMorningplan, showAfternoonplan, showNightplan;
 
-            public MyViewHolder(View view)
-            {
+            public MyViewHolder(View view) {
                 super(view);
                 showMorningplan = (TextView) view.findViewById(R.id.showmorningplan);
                 showAfternoonplan = (TextView) view.findViewById(R.id.showafternoonplan);
