@@ -1,6 +1,8 @@
 package com.bank;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 public class PlanActivity extends AppCompatActivity implements View.OnClickListener {
 
     //按钮
-    private Button PlanSure, PlanCancel;
+    private Button PlanSure, PlanCancel, PlanDelete;
     //编辑框控件
     private EditText MorningPlan, AfternoonPlan, NightPlan;
     private ImageView PlanBack;
@@ -30,11 +32,10 @@ public class PlanActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plan);
         initView();
-
     }
 
     public void initView() {
-        PlanSure = findViewById(R.id.btn_savebill);
+        PlanSure = findViewById(R.id.btn_createbill);
         PlanCancel = findViewById(R.id.btn_cancelplan);
         MorningPlan = findViewById(R.id.MorningPlan);
         AfternoonPlan = findViewById(R.id.AfternoonPlan);
@@ -47,7 +48,7 @@ public class PlanActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_savebill:
+            case R.id.btn_createbill:
                 GetData();
                 WriteData();
                 break;
@@ -81,4 +82,5 @@ public class PlanActivity extends AppCompatActivity implements View.OnClickListe
         this.finish();
 
     }
+
 }

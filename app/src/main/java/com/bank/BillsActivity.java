@@ -53,17 +53,16 @@ public class BillsActivity extends Activity implements View.OnClickListener {
                 listData,
                 R.layout.billsitem,
                 new String[]{"Time", "Type", "Fee", "Remarks"},
-                new int[]{R.id.texttimeshow, R.id.imagetypeshow, R.id.textfeeshow, R.id.textremarksshow}
+                new int[]{R.id.texttimeshow, R.id.imagetypeshow,
+                        R.id.textfeeshow, R.id.textremarksshow}
         );
         //赋予数据
         mlistbills.setAdapter(mlistbillsAdapter);
 
-        //常按响应
-        View.OnCreateContextMenuListener listviewLongPress = new View.OnCreateContextMenuListener() {
+        //长按响应
+        AdapterView.OnItemLongClickListener lvLongClickListener = new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                // TODO Auto-generated method stub
-                final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 new AlertDialog.Builder(BillsActivity.this)
                         /* 弹出窗口的最上头文字 */
@@ -77,7 +76,7 @@ public class BillsActivity extends Activity implements View.OnClickListener {
                                     public void onClick(
                                             DialogInterface dialoginterface, int i) {
                                         // 获取位置索引
-                                        int mListPos = info.position;
+                                        int mListPos = position;
                                         // 获取对应HashMap数据内容
                                         HashMap<String, Object> map = listData.get(mListPos);
                                         // 获取id
@@ -107,26 +106,26 @@ public class BillsActivity extends Activity implements View.OnClickListener {
                             }
                         }
                 ).show();
-
+                return true;
             }
         };
+        mlistbills.setOnItemLongClickListener(lvLongClickListener);
 
-//                mlistbills.setOnCreateContextMenuListener(listviewLongPress);
 //                //点击事件
-//                AdapterView.OnItemClickListener lvItemListener  = new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                                // 获取对应HashMap数据内容
-//                                HashMap<String, Object> map = listData.get(i);
-//                                // 获取id
-//                                int id = Integer.valueOf((map.get("ID").toString()));
-//                                Intent intent = new Intent(BillsActivity.this, RecorderActivity.class);
-//                                intent.putExtra("ID",id);
-//                                startActivity(intent);
-//                                BillsActivity.this.finish();
-//                        }
-//                };
-//                mlistbills.setOnItemClickListener(lvItemListener);
+                AdapterView.OnItemClickListener lvItemListener  = new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                // 获取对应HashMap数据内容
+                                HashMap<String, Object> map = listData.get(i);
+                                // 获取id
+                                int id = Integer.valueOf((map.get("ID").toString()));
+                                Intent intent = new Intent(BillsActivity.this, RecorderActivity.class);
+                                intent.putExtra("ID",id);
+                                startActivity(intent);
+                                BillsActivity.this.finish();
+                        }
+                };
+                mlistbills.setOnItemClickListener(lvItemListener);
 
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -173,9 +172,9 @@ public class BillsActivity extends Activity implements View.OnClickListener {
             map.put("ID", cursor.getString(cursor.getColumnIndex("ID")));
             map.put("Fee", cursor.getDouble(cursor.getColumnIndex("Fee")));
             map.put("Time", cursor.getString(cursor.getColumnIndex("Time")));
-            if (budget.equals("income"))
+            if (budget != null && budget.equals("income"))
                 map.put("Fee", "+" + cursor.getString(cursor.getColumnIndex("Fee")));
-            else
+            else if(budget != null && budget.equals("payment"))
                 map.put("Fee", "-" + cursor.getString(cursor.getColumnIndex("Fee")));
             map.put("Remarks", cursor.getString(cursor.getColumnIndex("Remarks")));
 

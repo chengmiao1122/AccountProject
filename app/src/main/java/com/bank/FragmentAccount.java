@@ -23,9 +23,6 @@ public class FragmentAccount extends Fragment {
     private SQLiteDatabase mDataBase;
     private TextView textRemainder, textPay, textIncome;
 
-    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private AlertDialog dialog;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.finance_check, container, false);
@@ -50,9 +47,9 @@ public class FragmentAccount extends Fragment {
                 //移动到指定记录
                 double Fee = cursor.getDouble(cursor.getColumnIndex("Fee"));
                 String budget = cursor.getString(cursor.getColumnIndex("Budget"));
-                if (budget.equals("payment")) {
+                if (budget != null &&budget.equals("payment")) {
                     resultPay += Fee;
-                } else if (budget.equals("income")) {
+                } else if (budget != null && budget.equals("income")) {
                     resultIncome += Fee;
                 }
                 cursor.moveToNext();

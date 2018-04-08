@@ -1,15 +1,18 @@
 package com.bank;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -20,35 +23,36 @@ import java.util.List;
  * Created by Adminstrator on 2017/4/2.
  */
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
-    private View.OnClickListener onclicklistene;
-
     //用于控制mainactivity主界面显示内容
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments = new ArrayList<Fragment>();
 
     /**
-     * 底部四个按钮
+     * 底部三个按钮
      */
-    private LinearLayout mTabBtnWeixin;
-    private LinearLayout mTabBtnFrd;
-    private LinearLayout mTabBtnAddress;
-    private LinearLayout mTabBtnSettings;
+    private LinearLayout mTabBtnAccount;
+    private LinearLayout mTabBtnPlan;
+    private LinearLayout mTabBtnManage;
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onResume() {
+        super.onResume();
+
         mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
+
+        verifyStoragePermissions(this);
 
         initView();
 
         findViewById(R.id.iv_acount).setOnClickListener(this);
         findViewById(R.id.iv_manage).setOnClickListener(this);
         findViewById(R.id.iv_planDetail).setOnClickListener(this);
-        findViewById(R.id.iv_setting).setOnClickListener(this);
 
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
 
@@ -61,6 +65,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public Fragment getItem(int arg0) {
                 return mFragments.get(arg0);
             }
+
         };
 
         mViewPager.setAdapter(mAdapter);
@@ -71,23 +76,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onPageSelected(int position) {
                 resetTabBtn();
-                //将所点击按钮图样设置为绿色被选图样 并获取所选按钮位置position
+                //set selected bottom iamge to green
                 switch (position) {
                     case 0:
-                        ((ImageView) mTabBtnWeixin.findViewById(R.id.iv_acount))
+                        ((ImageView) mTabBtnAccount.findViewById(R.id.iv_acount))
                                 .setImageResource(R.drawable.home_pressed);
                         break;
                     case 1:
-                        ((ImageView) mTabBtnFrd.findViewById(R.id.iv_planDetail))
+                        ((ImageView) mTabBtnPlan.findViewById(R.id.iv_planDetail))
                                 .setImageResource(R.drawable.plan_pressed);
                         break;
                     case 2:
-                        ((ImageView) mTabBtnAddress.findViewById(R.id.iv_manage))
+                        ((ImageView) mTabBtnManage.findViewById(R.id.iv_manage))
                                 .setImageResource(R.drawable.plus_pressed);
-                        break;
-                    case 3:
-                        ((ImageView) mTabBtnSettings.findViewById(R.id.iv_setting))
-                                .setImageResource(R.drawable.setting_pressed);
                         break;
                 }
 
@@ -106,29 +107,47 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-    //将底部四个按钮图样初始化为未点击灰色图样
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+
+        try {
+            //check for permission
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // ask for permission
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //reset the three bottom image to grey
     protected void resetTabBtn() {
 
-        ((ImageView) mTabBtnWeixin.findViewById(R.id.iv_acount))
+        ((ImageView) mTabBtnAccount.findViewById(R.id.iv_acount))
                 .setImageResource(R.drawable.home_unpressed);
-        ((ImageView) mTabBtnFrd.findViewById(R.id.iv_planDetail))
+        ((ImageView) mTabBtnPlan.findViewById(R.id.iv_planDetail))
                 .setImageResource(R.drawable.plan_unpress);
-        ((ImageView) mTabBtnAddress.findViewById(R.id.iv_manage))
+        ((ImageView) mTabBtnManage.findViewById(R.id.iv_manage))
                 .setImageResource(R.drawable.plus_unpressed);
-        ((ImageView) mTabBtnSettings.findViewById(R.id.iv_setting))
-                .setImageResource(R.drawable.setting_unpressed);
     }
 
     private void initView() {
 
-        mTabBtnWeixin = (LinearLayout) findViewById(R.id.bottom_account);
-        mTabBtnFrd = (LinearLayout) findViewById(R.id.bottom_plan);
-        mTabBtnAddress = (LinearLayout) findViewById(R.id.bottom_manage);
-        mTabBtnSettings = (LinearLayout) findViewById(R.id.bottom_setting);
+        mTabBtnAccount = (LinearLayout) findViewById(R.id.bottom_account);
+        mTabBtnPlan = (LinearLayout) findViewById(R.id.bottom_plan);
+        mTabBtnManage = (LinearLayout) findViewById(R.id.bottom_manage);
 
-        //将四个fragment创建并添加到mFragments列表中开始监听
         FragmentAccount fragmentaccount = new FragmentAccount();
-        FragmentFind fragmentfind = new FragmentFind();/*******************************/
+        FragmentManage fragmentfind = new FragmentManage();
         FragmentPlan fragmentplan = new FragmentPlan();
         mFragments.add(fragmentaccount);
         mFragments.add(fragmentplan);
@@ -145,9 +164,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.iv_manage:
                 mViewPager.setCurrentItem(2, true);
-                break;
-            case R.id.iv_setting:
-                mViewPager.setCurrentItem(3, true);
                 break;
         }
     }

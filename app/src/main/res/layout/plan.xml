@@ -75,7 +75,7 @@
 
 
     <Button
-        android:id="@+id/btn_savebill"
+        android:id="@+id/btn_createbill"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
@@ -90,10 +90,12 @@
         android:id="@+id/btn_cancelplan"
         android:layout_width="100dp"
         android:layout_height="40dp"
+        android:layout_alignBaseline="@+id/btn_createbill"
+        android:layout_alignBottom="@+id/btn_createbill"
         android:layout_alignEnd="@+id/NightPlan"
         android:layout_alignRight="@+id/NightPlan"
-        android:layout_alignTop="@+id/btn_savebill"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:text="Cancel"
         android:textSize="15sp" />
 
@@ -156,4 +158,5 @@
         android:text="Afternoon"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="20dp" />
+
 </RelativeLayout>

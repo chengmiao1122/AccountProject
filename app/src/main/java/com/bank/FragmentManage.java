@@ -14,13 +14,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 /**
  * Created by Adminstrator on 2017/4/2.
  */
 //多记计界面
-public class FragmentFind extends Fragment implements View.OnClickListener {
+public class FragmentManage extends Fragment implements View.OnClickListener {
     //记一笔
     private FrameLayout frameLayout_recorder;
     //账单
@@ -53,28 +55,6 @@ public class FragmentFind extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), BillsActivity.class));
                 break;
             case R.id.frameLayoutPlan:
-                //消息通知栏
-                //定义NotificationManager
-                String ns = Context.NOTIFICATION_SERVICE;
-                NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(ns);
-                //定义通知栏展现的内容信息
-                int icon = R.drawable.back;
-                CharSequence tickerText = "通知栏";
-                long when = System.currentTimeMillis();
-                //Notification notification = new Notification(icon, tickerText, when);
-
-                //定义下拉通知栏时要展现的内容信息
-                Context context = getActivity().getApplicationContext();
-                CharSequence contentTitle = "已经完成同步";
-                CharSequence contentText = "进入程序查看详情";
-                Intent notificationIntent = new Intent(getActivity(), MainActivity.class);
-                PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0,
-                        notificationIntent, 0);
-                //notification.setLatestEventInfo(context, contentTitle, contentText,
-                //       contentIntent);
-
-                //用mNotificationManager的notify方法通知用户生成标题栏消息通知
-                // mNotificationManager.notify(1, notification);
                 startActivity(new Intent(getActivity(), PlanActivity.class));
                 break;
             default:

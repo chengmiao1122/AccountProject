@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -27,7 +28,7 @@ import java.util.Calendar;
  */
 public class RecorderActivity extends Activity implements View.OnClickListener {
 
-    private Button mbutton_sure, mbutton_cancel;
+    private Button mbutton_create, mbutton_cancel, mbutton_save;
     private Spinner mspinner_type;
     private EditText medittext_fee, medittext_remarks;
     private TextView medittext_time;
@@ -41,12 +42,15 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
     private String content_type, content_select_group;
     private ArrayList<String> Data = new ArrayList<String>();
 
+    private int id;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recorder);
 
         //获得控件
-        mbutton_sure = findViewById(R.id.btn_savebill);
+        mbutton_create = findViewById(R.id.btn_createbill);
+        mbutton_save = findViewById(R.id.btn_savebill);
         mbutton_cancel = findViewById(R.id.btn_cancelbill);
         medittext_time = findViewById(R.id.tv_time);
         medittext_fee = findViewById(R.id.et_fee);
@@ -63,7 +67,8 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         medittext_time.setOnClickListener(this);
         mspinner_type.setOnItemSelectedListener(listener);
         mRadiogroup.setOnCheckedChangeListener(grouplistener);
-        mbutton_sure.setOnClickListener(this);
+        mbutton_create.setOnClickListener(this);
+        mbutton_save.setOnClickListener(this);
         mbutton_cancel.setOnClickListener(this);
 
         getDataFromIntent();
@@ -95,7 +100,7 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_savebill:
+            case R.id.btn_createbill:
                 Data.clear();
                 Data.add(content_type);
                 Data.add(medittext_time.getText().toString());
@@ -103,6 +108,15 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
                 Data.add(medittext_remarks.getText().toString());
                 Data.add(content_select_group);
                 WriteData(Data);
+                break;
+            case R.id.btn_savebill:
+                Data.clear();
+                Data.add(content_type);
+                Data.add(medittext_time.getText().toString());
+                Data.add(medittext_fee.getText().toString());
+                Data.add(medittext_remarks.getText().toString());
+                Data.add(content_select_group);
+                UpdateData(Data, id);
                 break;
             case R.id.btn_cancelbill:
                 this.finish();
@@ -147,10 +161,61 @@ public class RecorderActivity extends Activity implements View.OnClickListener {
         this.finish();
     }
 
-    public void getDataFromIntent() {
-        Intent intent = getIntent();
-        int id = intent.getIntExtra("ID", 0);
+    public void UpdateData(ArrayList<String> Data, int id) {
         mMysql = new MySQLiteHelper(this, "finance.db", null, 1);
         mDataBase = mMysql.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("Type", Data.get(0));
+        cv.put("Time", Data.get(1));
+        cv.put("Fee", Data.get(2));
+        cv.put("Remarks", Data.get(3));
+        cv.put("Budget", Data.get(4));
+
+        mDataBase.update("finance", cv, "id=?", new String[]{String.valueOf(id)});
+        mDataBase.close();
+        mMysql.close();
+        //结束当前activity
+        this.finish();
+    }
+
+    public void getDataFromIntent() {
+        Intent intent = getIntent();
+        id = intent.getIntExtra("ID", 0);
+        mMysql = new MySQLiteHelper(this, "finance.db", null, 1);
+        mDataBase = mMysql.getReadableDatabase();
+
+        Cursor cursor = mDataBase.rawQuery("select Type, Time, Fee, Budget, Remarks from finance where ID =?",new String[]{String.valueOf(id)});
+
+        cursor.moveToFirst();
+
+        if(cursor.getCount()>0) {
+            if ((cursor.getString(cursor.getColumnIndex("Budget"))).equals("payment")) {
+                mRadiogroup.check(R.id.rbtn_payment);
+            } else if ((cursor.getString(cursor.getColumnIndex("Budget"))).equals("income")) {
+                mRadiogroup.check(R.id.rbtn_income);
+            }
+
+            if ((cursor.getString(cursor.getColumnIndex("Type"))).equals("clothing")) {
+                mspinner_type.setSelection(0);
+            } else if ((cursor.getString(cursor.getColumnIndex("Type"))).equals("eat")) {
+                mspinner_type.setSelection(1);
+            } else if ((cursor.getString(cursor.getColumnIndex("Type"))).equals("housing")) {
+                mspinner_type.setSelection(2);
+            } else if ((cursor.getString(cursor.getColumnIndex("Type"))).equals("tansportation")) {
+                mspinner_type.setSelection(3);
+            } else if ((cursor.getString(cursor.getColumnIndex("Type"))).equals("others")) {
+                mspinner_type.setSelection(4);
+            }
+
+            medittext_time.setText(cursor.getString(cursor.getColumnIndex("Time")));
+
+            medittext_fee.setText(cursor.getString(cursor.getColumnIndex("Fee")));
+
+            medittext_remarks.setText(cursor.getString(cursor.getColumnIndex("Remarks")));
+        }
+
+        cursor.close();
+        mDataBase.close();
+        mMysql.close();
     }
 }

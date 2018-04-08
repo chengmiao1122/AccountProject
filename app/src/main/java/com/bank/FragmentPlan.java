@@ -1,6 +1,9 @@
 package com.bank;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,12 +15,15 @@ import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,7 +45,6 @@ public class FragmentPlan extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.showplan, container, false);
 
-
         initData();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -50,7 +55,6 @@ public class FragmentPlan extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         return view;
-
     }
 
     public void initData() {
@@ -215,35 +219,75 @@ public class FragmentPlan extends Fragment {
         }
     }
 
-    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
+    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> implements View.OnLongClickListener {
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(getActivity()).inflate(R.layout.planitem, parent, false));
+            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(getActivity()).
+                    inflate(R.layout.planitem, parent, false));
             return holder;
         }
-
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             PlanData data = mplanData.get(position);
             holder.showMorningplan.setText(data.getMoringPlan());
             holder.showAfternoonplan.setText(data.getAfterPlan());
             holder.showNightplan.setText(data.getNightPlan());
-        }
 
+            holder.showNightplan.setOnLongClickListener(this);
+        }
         @Override
         public int getItemCount() {
             return mplanData.size();
         }
 
+        @Override
+        public boolean onLongClick(final View v) {
+            new AlertDialog.Builder(getContext())
+                        /* 弹出窗口的最上头文字 */
+                    .setTitle("delete this plan?")
+                        /* 设置弹出窗口的图式 */
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                        /* 设置弹出窗口的信息 */
+                    .setMessage("Determine to delete the current plan")
+                    .setPositiveButton("YES",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+
+                                    //获取当前数据库
+                                    mMysql = new MySQLiteHelper(getActivity(), "finance.db", null, 1);
+                                    mDataBase = mMysql.getReadableDatabase();
+                                    try {
+                                        String nightplan = ((TextView)v).getText().toString();
+                                        mDataBase.delete("plan","Nightplan=?",new String[]{nightplan});
+
+                                    } catch (Exception e) {
+                                        Log.e("delete erro!", "error");
+                                    } finally {
+                                        mDataBase.close();
+                                        mMysql.close();
+                                    }
+                                }
+                            }
+                    ).setNegativeButton(
+                    "NO",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialoginterface, int i) {
+                        }
+                    }
+            ).show();
+
+            return true;
+        }
+
         class MyViewHolder extends RecyclerView.ViewHolder {
-
-            TextView showMorningplan, showAfternoonplan, showNightplan;
-
+            TextView showMorningplan, showAfternoonplan, showNightplan,showID;
             public MyViewHolder(View view) {
                 super(view);
                 showMorningplan = (TextView) view.findViewById(R.id.showmorningplan);
                 showAfternoonplan = (TextView) view.findViewById(R.id.showafternoonplan);
                 showNightplan = (TextView) view.findViewById(R.id.shownightplan);
+                showID = view.findViewById(R.id.Conclusion);
             }
         }
     }

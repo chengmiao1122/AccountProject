@@ -166,25 +166,23 @@
         android:textSize="15dp"/>
 
     <Button
+        android:id="@+id/btn_createbill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:text="Save"
-        android:id="@+id/btn_savebill"
-        android:layout_below="@+id/et_remarks"
-        android:layout_alignLeft="@+id/texttype"
-        android:layout_alignStart="@+id/texttype"
-        android:layout_marginTop="36dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_alignLeft="@+id/textfeeshow"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textfeeshow"
+        android:layout_marginBottom="18dp"
+        android:text="CREATE" />
 
     <Button
         android:id="@+id/btn_cancelbill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_alignEnd="@+id/et_remarks"
 
-        android:layout_alignRight="@+id/et_remarks"
-        android:layout_alignTop="@+id/btn_savebill"
-        android:layout_marginRight="20dp"
+        android:layout_alignBottom="@+id/btn_createbill"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/btn_savebill"
         android:text="Cancel" />
 
     <RadioGroup
@@ -199,7 +197,7 @@
         android:layout_marginTop="58dp">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/rbtn_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/texttimeshow"
@@ -211,7 +209,7 @@
             android:text="income" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/rbtn_payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/radioGroup"
@@ -221,6 +219,15 @@
             android:text="payment" />
 
     </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_savebill"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/btn_createbill"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/btn_createbill"
+        android:text="SAVE" />
 
 
 </RelativeLayout>
