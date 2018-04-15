@@ -16,4 +16,4 @@ last you can  check the bill
 
 There is a account in main interface
 
-![demo](display/account)
+![demo](display/account.png)
